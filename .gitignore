@@ -1,0 +1,8 @@
+__pycache__
+dist/
+*.pyc
+.venv/
+poetry.lock
+.pytest_cache/
+.coverage
+coverage.xmls
