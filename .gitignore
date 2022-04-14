@@ -6,3 +6,5 @@ poetry.lock
 .pytest_cache/
 .coverage
 coverage.xmls
+.env
+*.db
