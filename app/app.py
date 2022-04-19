@@ -87,3 +87,17 @@ def url_redirect(id):  # noqa: WPS125
         return redirect(original_url)
     flash('Invalid URL')
     return redirect(url_for('index'))
+
+
+@app.route('/about')
+def about():
+    """Render about page.
+
+    Returns:
+        str.
+    """
+    return render_template('about.html')
+
+
+if __name__ == '__main__':
+    app.run()
