@@ -1,23 +1,18 @@
 """Main logic."""
-import sqlite3
-
 from hashids import Hashids
 from flask import Flask, render_template, request, flash, redirect, url_for
-
-
-def get_db_connection():
-    """Get connection with database.
-
-    Returns:
-        connection
-    """
-    conn = sqlite3.connect('database.db')
-    conn.row_factory = sqlite3.Row
-    return conn
-
+from app.models import Url, db
 
 app = Flask(__name__)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///urls.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.secret_key = b'hkahs3720/'  # use a random string
+app.config['SESSION_PERMANENT'] = False
+app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SECRET_KEY'] = 'secret random string'
+
+db.init_app(app)
 
 hashids = Hashids(min_length=4, salt=app.config['SECRET_KEY'])
 
@@ -29,27 +24,31 @@ def index():  # noqa: WPS210
     Returns:
         str.
     """
-    conn = get_db_connection()
-
     if request.method == 'POST':
         url = request.form['url']
 
-        if not url:
-            flash('The URL is required!')
-            return redirect(url_for('index'))
+        if db.session.query(Url).filter(Url.original_url == url).scalar():
 
-        url_data = conn.execute(
-            'INSERT INTO urls (original_url) VALUES (?)',
-            (url,),
-        )
-        conn.commit()
-        conn.close()
+            url_data = db.session.query(Url).filter(
+                Url.original_url == url,
+            ).one()
+            short_url = request.host_url + hashids.encode(url_data.id)
+            return render_template('index.html', short_url=short_url)
 
-        url_id = url_data.lastrowid
-        hashid = hashids.encode(url_id)
-        short_url = request.host_url + hashid
+        if url:
+            url_data = Url(original_url=url)
 
-        return render_template('index.html', short_url=short_url)
+            db.session.add(url_data)
+            db.session.commit()
+
+            url_id = url_data.id
+            hashid = hashids.encode(url_id)
+            short_url = request.host_url + hashid
+
+            return render_template('index.html', short_url=short_url)
+
+        flash('The URL is required!')
+        return redirect(url_for('index'))
 
     return render_template('index.html')
 
@@ -64,26 +63,19 @@ def url_redirect(id):  # noqa: WPS125
     Returns:
         Response.
     """
-    conn = get_db_connection()
-
     original_id = hashids.decode(id)
 
     if original_id:
         original_id = original_id[0]
-        url_data = conn.execute(
-            'SELECT original_url, clicks FROM urls WHERE id = (?)',
-            (original_id,),
-        ).fetchone()
-        original_url = url_data['original_url']
-        clicks = url_data['clicks']
+        url_data = db.session.query(Url).filter(
+            Url.id == original_id,
+            ).one()
 
-        conn.execute(
-            'UPDATE urls SET clicks = ? WHERE id = ?',
-            (clicks+1, original_id),
-        )
+        original_url = url_data.original_url
+        url_data.clicks_counter = Url.clicks_counter + 1
 
-        conn.commit()
-        conn.close()
+        db.session.commit()
+        db.session.close()
         return redirect(original_url)
     flash('Invalid URL')
     return redirect(url_for('index'))
@@ -96,17 +88,19 @@ def stats():
     Returns:
         str.
     """
-    conn = get_db_connection()
-    db_urls = conn.execute(
-        'SELECT id, created, original_url, clicks FROM urls',
-    ).fetchall()
-    conn.close()
+    db_urls = db.session.query(Url).all()
+    db.session.close()
 
     urls = []
     for url in db_urls:
-        url = dict(url)
-        url['short_url'] = request.host_url + hashids.encode(url['id'])
-        urls.append(url)
+        url_dict = {
+            'id': url.id,
+            'created': url.created,
+            'original_url': url.original_url,
+            'clicks': url.clicks_counter,
+        }
+        url_dict['short_url'] = request.host_url + hashids.encode(url.id)
+        urls.append(url_dict)
 
     return render_template('stats.html', urls=urls)
 
