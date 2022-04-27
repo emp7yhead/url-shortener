@@ -1,8 +1,5 @@
-install: .env
+install:
 	@poetry install
-
-.env:
-	@test ! -f .env && cp .env.example .env
 
 create_migration:
 	@poetry run flask db init
