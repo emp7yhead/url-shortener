@@ -7,4 +7,3 @@ poetry.lock
 .coverage
 coverage.xmls
 .env
-*.db
