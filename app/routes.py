@@ -1,20 +1,8 @@
-"""Main logic."""
-from hashids import Hashids
-from flask import Flask, render_template, request, flash, redirect, url_for
-from app.models import Url, db
+"""Routes logic."""
+from flask import flash, redirect, render_template, request, url_for
 
-app = Flask(__name__)
-
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///urls.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.secret_key = b'hkahs3720/'  # use a random string
-app.config['SESSION_PERMANENT'] = False
-app.config['SESSION_TYPE'] = 'filesystem'
-app.config['SECRET_KEY'] = 'secret random string'
-
-db.init_app(app)
-
-hashids = Hashids(min_length=4, salt=app.config['SECRET_KEY'])
+from app.main import app, db, hashids
+from app.models import Url
 
 
 @app.route('/', methods=('GET', 'POST'))
@@ -53,17 +41,17 @@ def index():  # noqa: WPS210
     return render_template('index.html')
 
 
-@app.route('/<id>')
-def url_redirect(id):  # noqa: WPS125
+@app.route('/<url_id>')
+def url_redirect(url_id):
     """Redirect to url.
 
     Args:
-        id: shorten url id.
+        url_id: shorten url id.
 
     Returns:
         Response.
     """
-    original_id = hashids.decode(id)
+    original_id = hashids.decode(url_id)
 
     if original_id:
         original_id = original_id[0]
@@ -113,7 +101,3 @@ def about():
         str.
     """
     return render_template('about.html')
-
-
-if __name__ == '__main__':
-    app.run()

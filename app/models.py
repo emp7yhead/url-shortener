@@ -1,10 +1,8 @@
 """Model for url."""
-from flask_sqlalchemy import SQLAlchemy
-
-db = SQLAlchemy()
+from app.main import db
 
 
-class Url(db.Model):
+class Url(db.Model):  # type: ignore
     """Model for url."""
 
     __tablename__ = 'urls'
