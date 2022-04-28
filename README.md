@@ -1,5 +1,6 @@
 # url-shortener
-
+<a href="https://codeclimate.com/github/emp7yhead/url-shortener/maintainability"><img src="https://api.codeclimate.com/v1/badges/10815e33b70070f3ca07/maintainability" /></a>
+<a href="https://codeclimate.com/github/emp7yhead/url-shortener/test_coverage"><img src="https://api.codeclimate.com/v1/badges/10815e33b70070f3ca07/test_coverage" /></a>
 ## Description:
 An application for shortening and saving the URLs you are interested in.
 
