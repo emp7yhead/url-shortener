@@ -11,4 +11,8 @@ RUN pip3 install --upgrade pip -r requirements.txt
 
 COPY . /app/
 
+ENTRYPOINT [ "gunicorn" ]
+
+CMD [ "-w" , "4", "--bind", "0.0.0.0:10000", "wsgi:app" ]
+
 
