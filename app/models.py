@@ -12,6 +12,6 @@ class Url(db.Model):  # type: ignore
         db.DateTime(timezone=True),
         nullable=False,
         server_default=db.func.now(),
-        )
+    )
     original_url = db.Column(db.String, nullable=False)
     clicks_counter = db.Column(db.Integer, default=0)

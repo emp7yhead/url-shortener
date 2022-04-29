@@ -1,8 +1,7 @@
 """Routes logic."""
-from flask import flash, redirect, render_template, request, url_for
-
 from app.main import app, db, hashids
 from app.models import Url
+from flask import flash, redirect, render_template, request, url_for
 
 
 @app.route('/', methods=('GET', 'POST'))
@@ -57,7 +56,7 @@ def url_redirect(url_id):
         original_id = original_id[0]
         url_data = db.session.query(Url).filter(
             Url.id == original_id,
-            ).one()
+        ).one()
 
         original_url = url_data.original_url
         url_data.clicks_counter = Url.clicks_counter + 1
@@ -76,7 +75,7 @@ def stats():
     Returns:
         str.
     """
-    db_urls = db.session.query(Url).all()
+    db_urls = db.session.query(Url).order_by(Url.id).all()
     db.session.close()
 
     urls = []
