@@ -3,15 +3,13 @@ install:
 
 create_migration:
 	@poetry run flask db init
-
-generate_init_migration: create_migration
 	@poetry run flask db migrate -m "Initial migration."
 
-migration: generate_init_migration
+migration:
 	@poetry run flask db upgrade	
 
 run:
-	@poetry run gunicorn -w 4 --bind 0.0.0.0:5000 wsgi:app
+	@poetry run gunicorn -w 1 --bind 0.0.0.0:5000 wsgi:app
 
 generate_secret:
 	@python -c 'import secrets; print(secrets.token_hex())'
@@ -28,4 +26,4 @@ test-coverage:
 requirements.txt: poetry.lock
 	@poetry export -f requirements.txt --output requirements.txt --without-hashes
 
-.PHONY: install requirements.txt
+.PHONY: install requirements.txt, generate_init_migration, migration
