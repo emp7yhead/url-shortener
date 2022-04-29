@@ -5,6 +5,12 @@
 ## Description:
 An application for shortening and saving the URLs you are interested in.
 
+https://flask-url-shortener.onrender.com/
+
+## Screenshots (click to watch fullscreen):
+<a href="https://i.imgur.com/kGbdnOl.png"><img  src="https://i.imgur.com/kGbdnOl.png" alt="main page" width="320"></a>
+<a href="https://i.imgur.com/gpy3opM.png"><img  src="https://i.imgur.com/gpy3opM.png" alt="statictics page" width="320"></a>
+
 ## Dependencies:
 
 - python = "^3.9"
@@ -13,6 +19,8 @@ An application for shortening and saving the URLs you are interested in.
 - Flask-Migrate = "^3.1.0"
 - gunicorn = "^20.1.0"
 - hashids = "^1.3.1"
+- psycopg2-binary = "^2.9.3"
+- python-dotenv = "^0.20.0"
 
 ## Installation:
 ### via poetry:
