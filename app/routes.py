@@ -14,9 +14,9 @@ def index():  # noqa: WPS210
     if request.method == 'POST':
         url = request.form['url']
 
-        if db.session.query(Url).filter(Url.original_url == url).scalar():
+        if Url.query.filter(Url.original_url == url).scalar():
 
-            url_data = db.session.query(Url).filter(
+            url_data = Url.query.filter(
                 Url.original_url == url,
             ).one()
             short_url = request.host_url + hashids.encode(url_data.id)
@@ -37,7 +37,7 @@ def index():  # noqa: WPS210
         flash('The URL is required!')
         return redirect(url_for('index'))
 
-    return render_template('index.html')
+    return render_template('index.html', page=1)
 
 
 @app.route('/<url_id>')
@@ -54,7 +54,7 @@ def url_redirect(url_id):
 
     if original_id:
         original_id = original_id[0]
-        url_data = db.session.query(Url).filter(
+        url_data = Url.query.filter(
             Url.id == original_id,
         ).one()
 
@@ -68,28 +68,27 @@ def url_redirect(url_id):
     return redirect(url_for('index'))
 
 
-@app.route('/stats')
-def stats():
-    """Render statictic page.
+@app.route('/stats/page/<int:page>', methods=['GET'])
+def stats(page=1):
+    """Render statictic page with pagination.
+
+    Args:
+        page: first page.
 
     Returns:
         str.
     """
-    db_urls = db.session.query(Url).order_by(Url.id).all()
+    per_page = 5
+    urls = Url.query.order_by(Url.id).paginate(page, per_page, error_out=False)
     db.session.close()
 
-    urls = []
-    for url in db_urls:
-        url_dict = {
-            'id': url.id,
-            'created': url.created,
-            'original_url': url.original_url,
-            'clicks': url.clicks_counter,
-        }
-        url_dict['short_url'] = request.host_url + hashids.encode(url.id)
-        urls.append(url_dict)
+    short_urls = {}
+    for url in urls.items:
 
-    return render_template('stats.html', urls=urls)
+        short_url = request.host_url + hashids.encode(url.id)
+        short_urls[url.id] = short_url
+
+    return render_template('stats.html', url=urls, short_urls=short_urls)
 
 
 @app.route('/about')
