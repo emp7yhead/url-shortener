@@ -2,6 +2,7 @@
 <a href="https://codeclimate.com/github/emp7yhead/url-shortener/maintainability"><img src="https://api.codeclimate.com/v1/badges/10815e33b70070f3ca07/maintainability" /></a>
 <a href="https://codeclimate.com/github/emp7yhead/url-shortener/test_coverage"><img src="https://api.codeclimate.com/v1/badges/10815e33b70070f3ca07/test_coverage" /></a>
 [![Check lint](https://github.com/emp7yhead/url-shortener/actions/workflows/check-lint.yml/badge.svg)](https://github.com/emp7yhead/url-shortener/actions/workflows/check-lint.yml)
+[![wemake-python-styleguide](https://img.shields.io/badge/style-wemake-000000.svg)](https://github.com/wemake-services/wemake-python-styleguide)
 ## Description:
 An application for shortening and saving the URLs you are interested in.
 
