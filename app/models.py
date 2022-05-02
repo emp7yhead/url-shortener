@@ -1,5 +1,5 @@
 """Model for url."""
-from app.main import db
+from app import db
 
 
 class Url(db.Model):  # type: ignore
