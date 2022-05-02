@@ -1,10 +1,7 @@
 """Config file for app."""
 import os
 
-from dotenv import load_dotenv
-
 basedir = os.path.abspath(os.path.dirname(__file__))
-load_dotenv('.env')
 
 
 class Config(object):
@@ -47,3 +44,12 @@ class TestingConfig(Config):
     """Config variables for testing."""
 
     TESTING = True
+
+
+CONFIG = {
+    'development': DevelopmentConfig,
+    'testing': TestingConfig,
+    'production': ProductionConfig,
+    'staging': StagingConfig,
+    'default': DevelopmentConfig,
+}
