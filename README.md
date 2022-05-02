@@ -8,8 +8,8 @@ An application for shortening and saving the URLs you are interested in.
 https://flask-url-shortener.onrender.com/
 
 ## Screenshots (click to watch fullscreen):
-<a href="https://i.imgur.com/kGbdnOl.png"><img  src="https://i.imgur.com/kGbdnOl.png" alt="main page" width="320"></a>
-<a href="https://i.imgur.com/gpy3opM.png"><img  src="https://i.imgur.com/gpy3opM.png" alt="statictics page" width="320"></a>
+<a href="https://i.imgur.com/npUisy2.png"><img  src="https://i.imgur.com/npUisy2.png" alt="main page" width="320"></a>
+<a href="https://i.imgur.com/G0e9L2m.png"><img  src="https://i.imgur.com/G0e9L2m.png" alt="statictics page" width="320"></a>
 
 ## Dependencies:
 
