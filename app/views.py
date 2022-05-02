@@ -1,10 +1,27 @@
 """Routes logic."""
-from app.main import app, db, hashids
+from app import db
 from app.models import Url
-from flask import flash, redirect, render_template, request, url_for
+from flask import (
+    Blueprint,
+    current_app,
+    flash,
+    redirect,
+    render_template,
+    request,
+    url_for,
+)
+from hashids import Hashids
+
+url_shortener = Blueprint(
+    'url_shortener',
+    __name__,
+    template_folder='templates',
+)
+
+hashids = Hashids(min_length=4, salt=current_app.secret_key)
 
 
-@app.route('/', methods=('GET', 'POST'))
+@url_shortener.route('/', methods=('GET', 'POST'))
 def index():  # noqa: WPS210
     """Render index page.
 
@@ -35,13 +52,13 @@ def index():  # noqa: WPS210
             return render_template('index.html', short_url=short_url)
 
         flash('The URL is required!')
-        return redirect(url_for('index'))
+        return redirect(url_for('url_shortener.index'))
 
     return render_template('index.html', page=1)
 
 
-@app.route('/<url_id>')
-def url_redirect(url_id):
+@url_shortener.route('/<url_id>')
+def url_redirect(url_id: int):
     """Redirect to url.
 
     Args:
@@ -65,11 +82,11 @@ def url_redirect(url_id):
         db.session.close()
         return redirect(original_url)
     flash('Invalid URL')
-    return redirect(url_for('index'))
+    return redirect(url_for('url_shortener.index'))
 
 
-@app.route('/stats/page/<int:page>', methods=['GET'])
-def stats(page=1):
+@url_shortener.route('/stats/page/<int:page>', methods=['GET'])
+def stats(page: int = 1):
     """Render statictic page with pagination.
 
     Args:
@@ -91,7 +108,7 @@ def stats(page=1):
     return render_template('stats.html', url=urls, short_urls=short_urls)
 
 
-@app.route('/about')
+@url_shortener.route('/about')
 def about():
     """Render about page.
 
