@@ -42,7 +42,7 @@ def test_page_not_found(client):
 
 
 def test_post_url(client):
-    """Test page that the form data was send successfullys.
+    """Test page that the form data was send successfully.
 
     Args:
         client: Flask application configured for testing.
@@ -50,3 +50,14 @@ def test_post_url(client):
     with client:
         response = client.post('/', data={'url': 'http://test.com'})
         assert response.status_code == 200
+
+
+def test_redirect(client):
+    """Check redirection.
+
+    Args:
+        client: Flask application configured for testing.
+    """
+    response = client.get('/hello', follow_redirects=True)
+    assert len(response.history) == 1
+    assert response.request.path == "/"
