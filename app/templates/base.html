@@ -10,16 +10,16 @@
   <body>
     <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
         <div class="container-fluid">
-          <a class="navbar-brand" href="{{ url_for('index')}}">UrlShortener</a>
+          <a class="navbar-brand" href="{{ url_for('url_shortener.index')}}">UrlShortener</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse" id="navbarToggleExternalContent">
             <div class="navbar-nav">
-              <a class="nav-link" href="{{ url_for('stats', page=1)}}">Stats</a>
+              <a class="nav-link" href="{{ url_for('url_shortener.stats', page=1)}}">Stats</a>
             </div>
             <div class="navbar-nav">
-              <a class="nav-link" href="{{ url_for('about')}}">About</a>
+              <a class="nav-link" href="{{ url_for('url_shortener.about')}}">About</a>
             </div>
           </div>
         </div>
