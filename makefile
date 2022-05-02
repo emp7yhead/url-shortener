@@ -18,8 +18,8 @@ lint:
 	@poetry run flake8 app
 
 test:
-	@poetry run pytest app
-
+	@poetry run pytest
+	
 test-coverage:
 	@poetry run pytest --cov=app
 
