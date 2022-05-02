@@ -21,7 +21,7 @@ test:
 	@poetry run pytest
 	
 test-coverage:
-	@poetry run pytest --cov=app
+	@poetry run pytest --cov=app --cov-report xml
 
 requirements.txt: poetry.lock
 	@poetry export -f requirements.txt --output requirements.txt --without-hashes
